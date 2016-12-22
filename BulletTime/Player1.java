@@ -8,8 +8,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Player1 extends Player
 {
-    boolean isIdle = true;
-    int animateFrame = 0;
+    int idleFrame = 0;
+    int walkFrame = 0;
+	int jumpFrame = 0;
+    int jumpDisplacement = -12;
+    boolean onGround = true;
+    boolean jumping = false;
+    boolean falling = false;
+    String status = "idle";
+    String queueStatus = "idle";
     String facingDirection = "right";
     String currentSpriteFile = "p1idle1right.png";
     /**
@@ -18,46 +25,165 @@ public class Player1 extends Player
      */
     public void act() 
     {
-        animateIdle();
-        frameLapse();
+        checkKey();
+        resetAnimateFrame();
+        checkJump();
+        animate();
     }
+
+    public void checkKey()
+    {
+        if(Greenfoot.isKeyDown("a"))
+        {
+            movement(-3,0);
+            queueStatus = "walk";
+            facingDirection = "left";
+        }
+        else if(Greenfoot.isKeyDown("d"))
+        {
+            movement(3,0);
+            queueStatus = "walk";
+            facingDirection = "right";
+        }
+        else if(!jumping){
+            queueStatus = "idle";
+        }
+        if(Greenfoot.isKeyDown("w") && status != "jump" && !falling){
+            jumping = true;
+            queueStatus = "jump";
+        }
+
+    }
+    public void checkJump(){
+        if(jumping){
+            movement(0,jumpDisplacement);
+            if(jumpDisplacement < 7){
+                jumpDisplacement += 1;
+            }
+            if(jumpDisplacement < 0){
+                falling = true;
+            }
+            if(this.getY()>=200){
+                jumpDisplacement = -12;
+                jumping = false;
+                falling = false;
+                status = "idle";
+            }
+        }
+
+    }
+
+    public void movement(int x, int y)
+    {
+        this.setLocation(this.getX()+x,this.getY()+y);
+
+    }
+
+    public void resetAnimateFrame(){
+        if(status != queueStatus){
+            idleFrame = 0;
+            walkFrame = 0;
+            status = queueStatus;
+        }
+    }
+
     public void animate()
     {
-        if(isIdle)
+        if(status == "idle")
         {
             animateIdle();
         }
-        
-    }
-    public void frameLapse()
-    {
-        animateFrame++;
-        if(animateFrame>60)
-        {
-            animateFrame = 0;
+        else if(status == "walk"){
+            animateWalk();
         }
+
     }
+
     public void animateIdle()
     {
         boolean changeSprite = false;
         String fileName = "p1idle";
-        if(animateFrame==0)
+        if(idleFrame==0)
         {
             changeSprite = true;
             fileName += "1";
         }
-        else if(animateFrame==30)
+        else if(idleFrame==30)
         {
             changeSprite = true;
             fileName += "2";
         }
-        
+
         fileName += facingDirection;
         fileName += ".png";
-        if((currentSpriteFile != fileName) && changeSprite)
-        {
+        if(changeSprite){
+            changeSprite(fileName);
+        }
+        idleFrame++;
+        if(idleFrame > 60){
+            idleFrame = 0;
+        }
+    }
+
+    public void animateWalk(){
+        boolean changeSprite = true;
+        String fileName = "p1walk";
+        if(walkFrame <= 8){
+            fileName += "1";
+        }
+        else if(walkFrame <= 16){
+            fileName += "2";
+        }
+        else if(walkFrame <= 24){
+            fileName += "3";
+        }
+        else if(walkFrame <= 32){
+            fileName += "4";
+        }
+        else if(walkFrame <= 40){
+            fileName += "5";
+        }
+        else if(walkFrame <= 48){
+            fileName += "6";
+        }
+        else if(walkFrame <= 56){
+            fileName += "7";
+        }
+        else if(walkFrame <= 64){
+            fileName += "8";
+        }
+        else if(walkFrame <= 72){
+            fileName += "9";
+        }
+        else if(walkFrame <= 80){
+            fileName += "10";
+        }
+        else if(walkFrame <= 88){
+            fileName += "11";
+        }
+        else{
+            changeSprite = false;
+        }
+        fileName += facingDirection;
+        fileName += ".png";
+        if(changeSprite){
+            changeSprite(fileName);
+        }
+        walkFrame++;
+        if(walkFrame > 88){
+            walkFrame = 0;
+        }
+
+    }
+    public void animateJump(){
+        
+    }
+    public void changeSprite(String fileName)
+    {
+        if(currentSpriteFile != fileName){
             currentSpriteFile = fileName;
             this.setImage(fileName);
         }
+
     }
 }
