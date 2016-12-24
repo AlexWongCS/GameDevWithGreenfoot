@@ -10,11 +10,11 @@ public class Player1 extends Player
 {
     int idleFrame = 0;
     int walkFrame = 0;
-	int jumpFrame = 0;
-    int jumpDisplacement = -12;
+    int jumpFrame = 0;
+    int jumpDisplacement = -10;
     boolean onGround = true;
     boolean jumping = false;
-    boolean falling = false;
+    boolean falling = true;
     String status = "idle";
     String queueStatus = "idle";
     String facingDirection = "right";
@@ -28,6 +28,7 @@ public class Player1 extends Player
         checkKey();
         resetAnimateFrame();
         checkJump();
+        checkOnGround();
         animate();
     }
 
@@ -36,13 +37,17 @@ public class Player1 extends Player
         if(Greenfoot.isKeyDown("a"))
         {
             movement(-3,0);
-            queueStatus = "walk";
+            if(!jumping){
+                queueStatus = "walk";
+            }
             facingDirection = "left";
         }
         else if(Greenfoot.isKeyDown("d"))
         {
             movement(3,0);
-            queueStatus = "walk";
+            if(!jumping){
+                queueStatus = "walk";
+            }
             facingDirection = "right";
         }
         else if(!jumping){
@@ -54,6 +59,7 @@ public class Player1 extends Player
         }
 
     }
+
     public void checkJump(){
         if(jumping){
             movement(0,jumpDisplacement);
@@ -63,12 +69,10 @@ public class Player1 extends Player
             if(jumpDisplacement < 0){
                 falling = true;
             }
-            if(this.getY()>=200){
-                jumpDisplacement = -12;
-                jumping = false;
-                falling = false;
-                status = "idle";
-            }
+
+        }
+        else if(!jumping && falling){
+            movement(0, 6);
         }
 
     }
@@ -83,6 +87,7 @@ public class Player1 extends Player
         if(status != queueStatus){
             idleFrame = 0;
             walkFrame = 0;
+            jumpFrame = 0;
             status = queueStatus;
         }
     }
@@ -92,6 +97,9 @@ public class Player1 extends Player
         if(status == "idle")
         {
             animateIdle();
+        }
+        else if(status == "jump"){
+            animateJump();
         }
         else if(status == "walk"){
             animateWalk();
@@ -175,8 +183,39 @@ public class Player1 extends Player
         }
 
     }
+
     public void animateJump(){
-        
+        boolean changeSprite = true;
+        String fileName = "p1jump";
+        if(jumpFrame <= 5){
+            fileName += "1";
+        }
+        else if(jumpFrame <= 10){
+            fileName += "2";
+        }
+        else if(jumpFrame <= 15){
+            fileName += "3";
+        }
+        else if(jumpFrame <= 20){
+            fileName += "4";
+        }
+        else if(jumpFrame <= 25){
+            fileName += "5";
+        }
+        else if(jumpFrame <= 30){
+            fileName += "6";
+        }
+        else{
+            changeSprite = false;
+        }
+        fileName += facingDirection;
+        fileName += ".png";
+        if(changeSprite){
+            changeSprite(fileName);
+        }
+
+        jumpFrame++;
+
     }
     public void changeSprite(String fileName)
     {
@@ -186,4 +225,20 @@ public class Player1 extends Player
         }
 
     }
+
+    public void checkOnGround(){
+        Actor obj = getOneObjectAtOffset(0, 20, Platform.class);
+        if(obj != null || this.getY()>=378){
+            jumpDisplacement = -12;
+            jumping = false;
+            falling = false;
+            if(jumping){
+                status = "idle";
+            }
+        }
+        else if(!jumping && !falling && obj == null){
+            falling = true;
+        }
+    }
 }
+

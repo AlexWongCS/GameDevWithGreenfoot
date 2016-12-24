@@ -28,5 +28,7 @@ public class MyWorld extends World
     {
         Player1 player1 = new Player1();
         addObject(player1,259,180);
+        Platform platform = new Platform();
+        addObject(platform,261,257);
     }
 }
