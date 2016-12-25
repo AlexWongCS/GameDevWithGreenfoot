@@ -227,8 +227,9 @@ public class Player1 extends Player
     }
 
     public void checkOnGround(){
-        Actor obj = getOneObjectAtOffset(0, 20, Platform.class);
-        if(obj != null || this.getY()>=378){
+        Actor obj1 = getOneObjectAtOffset(0, 20, Platform.class);
+        Actor obj2 = getOneObjectAtOffset(0, 21, Bottom.class);
+        if(obj1 != null || obj2 != null){
             jumpDisplacement = -12;
             jumping = false;
             falling = false;
@@ -236,8 +237,14 @@ public class Player1 extends Player
                 status = "idle";
             }
         }
-        else if(!jumping && !falling && obj == null){
+        else if(!jumping && !falling && obj1 == null && obj2 == null){
             falling = true;
+        }
+        if(obj1 != null){
+            this.setLocation(this.getX(), obj1.getY()-26);
+        }
+        else if(obj2 != null){
+            this.setLocation(this.getX(), obj2.getY()-32);
         }
     }
 }

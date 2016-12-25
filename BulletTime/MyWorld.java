@@ -30,5 +30,8 @@ public class MyWorld extends World
         addObject(player1,259,180);
         Platform platform = new Platform();
         addObject(platform,261,257);
+        Bottom bottom = new Bottom();
+        addObject(bottom,352,369);
+        bottom.setLocation(340,381);
     }
 }
