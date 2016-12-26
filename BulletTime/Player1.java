@@ -25,10 +25,13 @@ public class Player1 extends Player
      */
     public void act() 
     {
+
         checkKey();
         resetAnimateFrame();
         checkJump();
+
         checkOnGround();
+
         animate();
     }
 
@@ -36,7 +39,7 @@ public class Player1 extends Player
     {
         if(Greenfoot.isKeyDown("a"))
         {
-            movement(-3,0);
+            movement(-2,0);
             if(!jumping){
                 queueStatus = "walk";
             }
@@ -44,7 +47,7 @@ public class Player1 extends Player
         }
         else if(Greenfoot.isKeyDown("d"))
         {
-            movement(3,0);
+            movement(2,0);
             if(!jumping){
                 queueStatus = "walk";
             }
@@ -66,7 +69,7 @@ public class Player1 extends Player
             if(jumpDisplacement < 7){
                 jumpDisplacement += 1;
             }
-            if(jumpDisplacement < 0){
+            if(jumpDisplacement >= 0){
                 falling = true;
             }
 
@@ -217,6 +220,7 @@ public class Player1 extends Player
         jumpFrame++;
 
     }
+
     public void changeSprite(String fileName)
     {
         if(currentSpriteFile != fileName){
@@ -228,8 +232,14 @@ public class Player1 extends Player
 
     public void checkOnGround(){
         Actor obj1 = getOneObjectAtOffset(0, 20, Platform.class);
-        Actor obj2 = getOneObjectAtOffset(0, 21, Bottom.class);
-        if(obj1 != null || obj2 != null){
+        boolean onLowest = this.getY()>=344;
+        if(obj1 != null && falling){
+            this.setLocation(this.getX(), obj1.getY()-26);
+        }
+        else if(onLowest && falling){
+            this.setLocation(this.getX(), 344);
+        }
+        if((obj1 != null || onLowest)&& falling){
             jumpDisplacement = -12;
             jumping = false;
             falling = false;
@@ -237,15 +247,10 @@ public class Player1 extends Player
                 status = "idle";
             }
         }
-        else if(!jumping && !falling && obj1 == null && obj2 == null){
+        else if(!jumping && !falling && obj1 == null && !onLowest ){
             falling = true;
         }
-        if(obj1 != null){
-            this.setLocation(this.getX(), obj1.getY()-26);
-        }
-        else if(obj2 != null){
-            this.setLocation(this.getX(), obj2.getY()-32);
-        }
+
     }
 }
 
