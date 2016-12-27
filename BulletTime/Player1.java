@@ -12,6 +12,7 @@ public class Player1 extends Player
     int walkFrame = 0;
     int jumpFrame = 0;
     int jumpDisplacement = -10;
+    float realJumpDisplacement = -10;
     boolean onGround = true;
     boolean jumping = false;
     boolean falling = true;
@@ -33,6 +34,13 @@ public class Player1 extends Player
         checkOnGround();
 
         animate();
+        if(this.getX()>=595 && facingDirection=="right"){
+            this.setLocation(0,this.getY());
+        }
+        else if(this.getX()<=5 && facingDirection=="left"){
+            this.setLocation(600,this.getY());
+        }
+
     }
 
     public void checkKey()
@@ -66,16 +74,17 @@ public class Player1 extends Player
     public void checkJump(){
         if(jumping){
             movement(0,jumpDisplacement);
-            if(jumpDisplacement < 7){
-                jumpDisplacement += 1;
+            if(realJumpDisplacement < 5){
+                realJumpDisplacement+=0.5;
+                jumpDisplacement = (int)realJumpDisplacement ;
             }
-            if(jumpDisplacement >= 0){
+            if(realJumpDisplacement >= 0){
                 falling = true;
             }
 
         }
         else if(!jumping && falling){
-            movement(0, 6);
+            movement(0, 4);
         }
 
     }
@@ -101,7 +110,7 @@ public class Player1 extends Player
         {
             animateIdle();
         }
-        else if(status == "jump"){
+        else if(status == "jump" || falling){
             animateJump();
         }
         else if(status == "walk"){
@@ -190,22 +199,22 @@ public class Player1 extends Player
     public void animateJump(){
         boolean changeSprite = true;
         String fileName = "p1jump";
-        if(jumpFrame <= 5){
+        if(jumpFrame <= 2 && !falling){
             fileName += "1";
         }
-        else if(jumpFrame <= 10){
+        else if(jumpFrame<=4 && !falling){
             fileName += "2";
         }
-        else if(jumpFrame <= 15){
+        else if(jumpFrame <= 6 && !falling){
             fileName += "3";
         }
-        else if(jumpFrame <= 20){
+        else if(jumpFrame <= 13 && !falling){
             fileName += "4";
         }
-        else if(jumpFrame <= 25){
+        else if(jumpFrame <= 20 && !falling){
             fileName += "5";
         }
-        else if(jumpFrame <= 30){
+        else if(falling){
             fileName += "6";
         }
         else{
@@ -233,14 +242,19 @@ public class Player1 extends Player
     public void checkOnGround(){
         Actor obj1 = getOneObjectAtOffset(0, 20, Platform.class);
         boolean onLowest = this.getY()>=344;
-        if(obj1 != null && falling){
+        boolean onTop = false;
+        if(obj1 != null){
+            onTop = this.getY()<obj1.getY()-20;
+        }
+        if(obj1 != null && falling && onTop){
             this.setLocation(this.getX(), obj1.getY()-26);
         }
         else if(onLowest && falling){
             this.setLocation(this.getX(), 344);
         }
-        if((obj1 != null || onLowest)&& falling){
-            jumpDisplacement = -12;
+        if(((obj1 != null && onTop) || onLowest)&& falling){
+            jumpDisplacement = -10;
+            realJumpDisplacement = -10;
             jumping = false;
             falling = false;
             if(jumping){

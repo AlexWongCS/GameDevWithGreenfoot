@@ -1,5 +1,5 @@
 #Greenfoot properties
-#Sun Dec 25 20:52:57 EST 2016
+#Mon Dec 26 20:59:12 EST 2016
 target4.type=ClassTarget
 dependency3.from=MyWorld
 target3.height=50
@@ -40,6 +40,7 @@ dependency4.to=Bottom
 dependency5.to=Bottom
 target1.showInterface=false
 target5.showInterface=false
+class.Orb.image=orb.png
 package.numTargets=5
 target1.type=ClassTarget
 editor.swing.0.width=701
@@ -49,13 +50,14 @@ editor.swing.0.x=638
 class.Platform.image=platform2.png
 class.Platform.superclass=greenfoot.Actor
 target2.height=50
-target5.y=70
 target4.height=50
+target5.y=70
 target5.x=160
 target1.name=Player
 target4.y=70
 target4.x=70
 target3.y=130
+class.Orb.superclass=greenfoot.Actor
 target3.x=10
 target2.type=ClassTarget
 target2.y=10
@@ -73,6 +75,7 @@ dependency1.type=UsesDependency
 readme.height=58
 target2.name=Platform
 readme.name=@README
+simulation.speed=49
 package.numDependencies=5
 target3.type=ClassTarget
 target4.width=80
