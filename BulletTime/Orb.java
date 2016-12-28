@@ -8,17 +8,39 @@ import java.util.List;
  */
 public class Orb extends Actor
 {
+    boolean onSomething = false;
     /**
      * Act - do whatever the Orb wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
+        if(!onSomething){
+            fall();
+        }
         checkTouched();
     }
+
+    public void fall(){
+        Actor obj1 = getOneObjectAtOffset(0,10,Platform.class);
+        if(obj1 != null){
+            onSomething = true;
+            this.setLocation(this.getX(),obj1.getY()-18);
+        }
+        else if(this.getY()>=352){
+            onSomething = true;
+            this.setLocation(this.getX(),352);
+        }
+        else{
+            this.setLocation(this.getX(),this.getY()+1);
+        }
+    }
+
     public void checkTouched(){
         List l = getObjectsInRange(27,Player1.class);
         if(!l.isEmpty()){
+            MyWorld world = (MyWorld) getWorld();
+            world.increaseScore();
             getWorld().removeObject(this);
         }
     }

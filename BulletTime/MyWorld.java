@@ -9,6 +9,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class MyWorld extends World
 {
     boolean init = true;
+    int score = 0;
+    int plasmaCooldown = 10;
+    int currentCooldown = 10;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -24,8 +27,22 @@ public class MyWorld extends World
             init = false;
             setPaintOrder(Player1.class);
         }
+        countdown();
     }
-    
+    public void countdown(){
+        currentCooldown--;
+        if(currentCooldown<=0){
+            currentCooldown = plasmaCooldown;
+            addObject(new Orb(),Greenfoot.getRandomNumber(600),0);
+        }
+    }
+    public void increaseScore(){
+        score++;
+    }
+    public int getScore(){
+        return score;
+    }
+
     /**
      * Prepare the world for the start of the program.
      * That is: create the initial objects and add them to the world.
@@ -86,5 +103,26 @@ public class MyWorld extends World
         addObject(orb2,412,335);
         Orb orb3 = new Orb();
         addObject(orb3,334,353);
+        platform9.setLocation(223,121);
+        platform4.setLocation(421,239);
+        platform8.setLocation(123,153);
+        platform5.setLocation(233,255);
+        platform6.setLocation(299,191);
+        removeObject(orb3);
+        removeObject(orb2);
+        removeObject(orb);
+        platform2.setLocation(306,318);
+        platform.setLocation(127,319);
+        platform3.setLocation(461,307);
+        platform8.setLocation(129,155);
+        platform8.setLocation(135,155);
+        platform8.setLocation(135,159);
+        platform10.setLocation(453,153);
+        Score score = new Score();
+        addObject(score,365,139);
+        score.setLocation(29,383);
+        score.setLocation(17,379);
+        score.setLocation(59,381);
+        score.setLocation(103,381);
     }
 }
