@@ -9,9 +9,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class MyWorld extends World
 {
     boolean init = true;
+    boolean paused = true;
     int score = 0;
-    int plasmaCooldown = 10;
-    int currentCooldown = 10;
+    int plasmaCooldown = 150;
+    int currentCooldown = 150;
+    int orbCooldown = 100;
+    int numOrbs = 0;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -22,23 +25,43 @@ public class MyWorld extends World
         super(600, 400, 1); 
         prepare();
     }
+
     public void act(){
         if(init){
             init = false;
             setPaintOrder(Player1.class);
+            setPaintOrder(Score.class);
         }
-        countdown();
+        if(!paused){
+            orbCountdown();
+            plasmaCountdown();
+        }
     }
-    public void countdown(){
+
+    public void orbCountdown(){
+        orbCooldown--;
+        if(orbCooldown<=0 && numOrbs<=5){
+            orbCooldown = 100;
+            addObject(new Orb(),Greenfoot.getRandomNumber(600),0);
+            numOrbs++;
+        }
+    }
+
+    public void plasmaCountdown(){
         currentCooldown--;
         if(currentCooldown<=0){
             currentCooldown = plasmaCooldown;
-            addObject(new Orb(),Greenfoot.getRandomNumber(600),0);
+            addObject(new Plasma(),Greenfoot.getRandomNumber(600),0);
         }
     }
+
     public void increaseScore(){
         score++;
+        if(plasmaCooldown>=30){
+            plasmaCooldown-=8;
+        }
     }
+
     public int getScore(){
         return score;
     }
@@ -124,5 +147,20 @@ public class MyWorld extends World
         score.setLocation(17,379);
         score.setLocation(59,381);
         score.setLocation(103,381);
+        player1.setLocation(307,260);
+        Platform platform14 = new Platform();
+        addObject(platform14,129,226);
+        Start start = new Start();
+        addObject(start,310,313);
+        start.setLocation(288,295);
+        Controls controls = new Controls();
+        addObject(controls,280,364);
+        controls.setLocation(258,360);
+        Note note = new Note();
+        addObject(note,437,373);
+        note.setLocation(457,379);
+        Title title = new Title();
+        addObject(title,295,172);
+        title.setLocation(301,154);
     }
 }

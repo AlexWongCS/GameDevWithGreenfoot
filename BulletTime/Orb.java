@@ -9,6 +9,7 @@ import java.util.List;
 public class Orb extends Actor
 {
     boolean onSomething = false;
+    int speed = Greenfoot.getRandomNumber(2)+1;
     /**
      * Act - do whatever the Orb wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -32,7 +33,7 @@ public class Orb extends Actor
             this.setLocation(this.getX(),352);
         }
         else{
-            this.setLocation(this.getX(),this.getY()+1);
+            this.setLocation(this.getX(),this.getY()+speed);
         }
     }
 
@@ -41,6 +42,7 @@ public class Orb extends Actor
         if(!l.isEmpty()){
             MyWorld world = (MyWorld) getWorld();
             world.increaseScore();
+            world.numOrbs--;
             getWorld().removeObject(this);
         }
     }

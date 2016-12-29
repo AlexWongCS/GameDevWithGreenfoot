@@ -26,21 +26,24 @@ public class Player1 extends Player
      */
     public void act() 
     {
+        MyWorld world = (MyWorld)getWorld();
+        if(!world.paused){
+            checkKey();
+            resetAnimateFrame();
+            checkJump();
+            checkOnGround();
+            animate();
+            mapEdgeMove();
+        }
+    }
 
-        checkKey();
-        resetAnimateFrame();
-        checkJump();
-
-        checkOnGround();
-
-        animate();
+    public void mapEdgeMove(){
         if(this.getX()>=595 && facingDirection=="right"){
             this.setLocation(0,this.getY());
         }
         else if(this.getX()<=5 && facingDirection=="left"){
             this.setLocation(600,this.getY());
         }
-
     }
 
     public void checkKey()
