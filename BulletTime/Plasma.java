@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.util.List;
 /**
  * Write a description of class Plasma here.
  * 
@@ -18,7 +18,7 @@ public class Plasma extends Actor
     {
         animate();
         fall();
-        checkBottom();
+        checkDeletion();
     }
 
     public void animate(){
@@ -37,9 +37,15 @@ public class Plasma extends Actor
     public void fall(){
         setLocation(this.getX(),this.getY()+speed);
     }
-    public void checkBottom(){
+    public void checkDeletion(){
         if(getY()>=390){
             getWorld().removeObject(this);
+        }
+        else{
+            List l = getObjectsInRange(27,Player1.class);
+            if(!l.isEmpty()){
+                Greenfoot.setWorld(new MyWorld());
+            }
         }
     }
 }
